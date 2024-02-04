@@ -125,6 +125,10 @@ fn codes() -> Result<String, std::fmt::Error> {
                 panic!("`/*` comments not supported");
             }
 
+            if content.find("`").is_some() {
+                panic!("backticks (\"`\") are not supported");
+            }
+
             let lines: Vec<String> = content.lines().map(|s| s.to_owned()).collect();
 
             writeln!(&mut result, "=== {file_name}")?;
