@@ -6,7 +6,7 @@
   set document(author: authors, title: title)
   set page(
     // Adjust this
-    margin: (left: 25mm, right: 10mm, top: 15mm, bottom: 15mm),
+    margin: (left: 25mm, right: 5mm, top: 5mm, bottom: 10mm),
     numbering: "1", 
     number-align: center, 
     flipped: true
