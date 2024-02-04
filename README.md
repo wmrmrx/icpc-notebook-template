@@ -8,4 +8,4 @@ Ex.: `code/subject/problem.cpp`
 Docker, Make
 
 ## How to build
-Run `make` in the root folder
+Run `make` in the root folder, the pdf will be in `notebook.pdf` in the root folder

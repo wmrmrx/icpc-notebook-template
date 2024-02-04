@@ -29,15 +29,7 @@ fn md5sum(s: &str) -> String {
 }
 
 fn ignore_line(line: &str) -> bool {
-    line.is_empty() || line.starts_with("//") || line.starts_with("warning")
-}
-
-fn trim_comments(line: &str) -> &str {
-    if let Some((pre, _comments)) = line.split_once("//") {
-        pre
-    } else {
-        line
-    }
+    line.starts_with("#warning")
 }
 
 /// Returns the hashes list of a file
@@ -47,7 +39,6 @@ fn hashes(lines: &[String], path: &str) -> Vec<String> {
     let mut hashes = Vec::new();
 
     for (index, line) in lines.iter().enumerate() {
-        let line = trim_comments(line).trim_end();
         if ignore_line(line) {
             hashes.push("---".to_string());
             continue;
@@ -68,13 +59,6 @@ fn hashes(lines: &[String], path: &str) -> Vec<String> {
             .iter()
             .map(String::as_str)
             .filter(|&s| !ignore_line(s))
-            .map(|s| {
-                if let Some((pre, _comments)) = s.split_once("//") {
-                    pre
-                } else {
-                    s
-                }
-            })
             .collect::<Vec<_>>()
             .join("\n");
         hashes.push(md5sum(&scope_code));
@@ -120,10 +104,6 @@ fn codes() -> Result<String, std::fmt::Error> {
 
             let mut content = String::new();
             file.read_to_string(&mut content).unwrap();
-
-            if content.find("/*").is_some() {
-                panic!("`/*` comments not supported");
-            }
 
             if content.find("`").is_some() {
                 panic!("backticks (\"`\") are not supported");
