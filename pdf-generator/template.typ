@@ -55,6 +55,7 @@
   show raw.line: it => {
     assert(it.number <= hashes.len(), message: "less hashes than lines supplied")
     box(
+      width: 96%,
       align(horizon, stack(
        dir: ltr,
        box(width: 2.5em)[#hashes.at(it.number - 1)],
