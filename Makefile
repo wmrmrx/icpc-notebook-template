@@ -16,7 +16,7 @@ typst: compile
 .PHONY: typst
 
 compile: pdf-generator/main.rs
-	rustc -O pdf-generator/main.rs -o output/main
+	rustc --edition=2021 -O pdf-generator/main.rs -o output/main
 .PHONY: compile
 
 clean:

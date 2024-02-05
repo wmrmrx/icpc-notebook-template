@@ -84,8 +84,6 @@ fn codes() -> Result<String, std::fmt::Error> {
 
     let (send, recv) = mpsc::channel::<String>();
 
-    let time = std::time::Instant::now();
-
     for section in sections {
         let send = send.clone();
         std::thread::spawn(move || {
