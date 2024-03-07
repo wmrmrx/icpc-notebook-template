@@ -1,12 +1,15 @@
-// The project function defines how your document looks.
-// It takes your content and some metadata and formats it.
-// Go ahead and customize it to your liking!
-#let project(title: "", authors: (), logo: none, body) = {
+#let project(
+  title: "",
+  authors: (),
+  date: none,
+  logo: none,
+  body,
+) = {
   // Set the document's basic properties.
   set document(author: authors, title: title)
   set page(
     // Adjust this
-    margin: (left: 25mm, right: 5mm, top: 5mm, bottom: 10mm),
+    margin: (left: 12mm, right: 12mm, top: 5mm, bottom: 10mm),
     numbering: "1", 
     number-align: center, 
     flipped: true
@@ -22,6 +25,8 @@
   }
   v(9.6fr)
 
+  text(1.1em, date)
+  v(1.2em, weak: true)
   text(2em, weight: 700, title)
 
   // Author information.
@@ -38,11 +43,9 @@
   v(2.4fr)
   pagebreak()
 
-
   // Table of contents.
   outline(depth: 3, indent: true)
   pagebreak()
-
 
   // Main body.
   set par(justify: true)
@@ -69,5 +72,6 @@
     inset: 0.7em,
     it
   )
+  set raw(tab-size: 4)
   raw(content.text, lang: "cpp", block: true)
 }
