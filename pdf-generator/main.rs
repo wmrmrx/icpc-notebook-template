@@ -73,8 +73,8 @@ fn hashes(lines: &[String], path: &str) -> Vec<String> {
 /// === Code
 /// #cpp(`int main() {
 /// }`, hashes: ("foo", "bar"))
-fn codes() -> Result<String, std::fmt::Error> {
-    let mut sections = fs::read_dir("code/")
+fn codes(codes_dir_path: &str) -> Result<String, std::fmt::Error> {
+    let mut sections = fs::read_dir(codes_dir_path)
         .expect("Path `code/ doesn't exists!")
         .map(|entry| entry.expect("Failed to get entry").path())
         .collect::<Vec<_>>();
@@ -101,13 +101,6 @@ fn codes() -> Result<String, std::fmt::Error> {
                     let mut file =
                         fs::File::open(&code).unwrap_or_else(|_| panic!("{code:?} is not a file!"));
 
-                    assert!(
-                        file_name.ends_with(".cpp"),
-                        "{} is not a cpp file!",
-                        file_name
-                    );
-                    let file_name = file_name.trim_end_matches(".cpp");
-
                     let mut content = String::new();
                     file.read_to_string(&mut content).unwrap();
 
@@ -119,9 +112,10 @@ fn codes() -> Result<String, std::fmt::Error> {
 
                     code_send
                         .send(format!(
-                            "=== {file_name}\n#cpp(`{}`, hashes: ({}))\n",
-                            &lines.join("\n"),
-                            &hashes(&lines, &code.as_path().to_string_lossy())
+                            "=== {name}\n#cpp(`{all_lines}`, hashes: ({all_hashes}))\n",
+                            name = file_name.trim_end_matches(".cpp"),
+                            all_lines = &lines.join("\n"),
+                            all_hashes = &hashes(&lines, &code.as_path().to_string_lossy())
                                 .into_iter()
                                 .map(|s| format!("\"{s}\""))
                                 .collect::<Vec<_>>()
@@ -155,6 +149,8 @@ fn codes() -> Result<String, std::fmt::Error> {
 }
 
 fn main() {
-    let codes = codes().unwrap();
+    let codes_path = std::env::var("CODES_DIR_PATH")
+        .expect("Set the path of the codes directory as the CODES_DIR_PATH environment variable");
+    let codes = codes(&codes_path).unwrap();
     println!("{codes}");
 }
